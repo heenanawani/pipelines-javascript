@@ -21,3 +21,15 @@ steps:
 - task: CopyPublishBuildArtifacts@1
   inputs:
     ArtifactName: 'pipeline-using-nodejs'
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: |
+      sudo npm install -g anypoint-cli@latest
+      mkdir ~/.anypoint
+      cp $AGENT_TEMPDIRECTORY/credentials ~/.anypoint/
+      
+      export ANYPOINT_PROFILE="Sandbox"
+      export filename="$(System.DefaultWorkingDirectory)/_heenanawani.pipelines-javascript/drop/heenanawani.pipelines-javascript/target/heenanawani.pipelines-javascript-1.0.0-SNAPSHOT-mule-application.jar"
+      
+      anypoint-cli --environment=Sandbox --username=heenanawani2822 --password=bHANUPAWAN@22 runtime-mgr cloudhub-application deploy --runtime=4.3.0 --workers=1 --workerSize=0.1 --region=us-east-1 $(APP_NAME) $filename
